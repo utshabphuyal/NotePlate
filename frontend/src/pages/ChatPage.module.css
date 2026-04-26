@@ -1,0 +1,145 @@
+/* ChatPage.module.css */
+.shell {
+  display: flex;
+  height: calc(100vh - 64px - 64px);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--clr-surface);
+}
+
+.roomsSidebar {
+  width: 300px;
+  border-right: 1px solid var(--clr-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.roomsHeader {
+  padding: var(--sp-5) var(--sp-4);
+  border-bottom: 1px solid var(--clr-border);
+}
+.roomsTitle { font-family: var(--font-serif); font-size: var(--text-xl); }
+.roomsList { flex: 1; overflow-y: auto; }
+.roomItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  cursor: pointer;
+  border-bottom: 1px solid var(--clr-border);
+  transition: background var(--dur-fast);
+  position: relative;
+}
+.roomItem:hover { background: var(--clr-bg-alt); }
+.roomItemActive { background: var(--clr-primary-light) !important; }
+.roomInfo { flex: 1; min-width: 0; }
+.roomName { font-size: var(--text-sm); font-weight: 500; color: var(--clr-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.roomBook { font-size: 11px; color: var(--clr-primary); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.roomPreview { font-size: var(--text-xs); color: var(--clr-ink-3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.unreadBadge {
+  background: var(--clr-primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px; height: 18px;
+  border-radius: var(--radius-full);
+  display: grid; place-items: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.chatArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.noChat { display: flex; align-items: center; justify-content: center; height: 100%; }
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--clr-border);
+  flex-shrink: 0;
+}
+.chatHeaderName { font-size: var(--text-base); font-weight: 500; }
+.chatHeaderBook { font-size: var(--text-xs); color: var(--clr-primary); }
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.msgWrap { display: flex; align-items: flex-end; gap: var(--sp-2); }
+.msgMe { flex-direction: row-reverse; }
+.msgThem { flex-direction: row; }
+.bubble {
+  max-width: 70%;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bubbleMe {
+  background: var(--clr-primary);
+  color: white;
+  border-bottom-right-radius: var(--radius-sm);
+}
+.bubbleThem {
+  background: var(--clr-bg-alt);
+  color: var(--clr-ink);
+  border-bottom-left-radius: var(--radius-sm);
+}
+.bubbleDeleted { opacity: 0.5; font-style: italic; }
+.bubbleText { font-size: var(--text-sm); line-height: 1.5; margin: 0; word-break: break-word; }
+.bubbleTime { font-size: 10px; opacity: 0.65; align-self: flex-end; }
+
+.typingIndicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--clr-bg-alt);
+  border-radius: var(--radius-lg);
+  width: fit-content;
+}
+.typingDot {
+  width: 7px; height: 7px;
+  background: var(--clr-ink-3);
+  border-radius: 50%;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+.typingDot:nth-child(2) { animation-delay: 0.2s; }
+.typingDot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+
+.inputArea {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-top: 1px solid var(--clr-border);
+  flex-shrink: 0;
+}
+.messageInput {
+  flex: 1;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--clr-bg-alt);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--clr-ink);
+  transition: border-color var(--dur-fast);
+}
+.messageInput:focus { outline: none; border-color: var(--clr-primary); }
+
+@media (max-width: 640px) {
+  .roomsSidebar { width: 100%; position: absolute; z-index: 10; background: var(--clr-surface); }
+  .chatArea { width: 100%; }
+}

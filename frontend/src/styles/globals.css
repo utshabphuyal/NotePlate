@@ -1,0 +1,189 @@
+/* NotePlate Global Styles — warm editorial aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+:root {
+  /* Color palette */
+  --clr-bg:        #FAFAF7;
+  --clr-bg-alt:    #F3F1EB;
+  --clr-surface:   #FFFFFF;
+  --clr-border:    #E5E0D5;
+  --clr-border-strong: #C9C2B4;
+
+  --clr-ink:       #1A1714;
+  --clr-ink-2:     #4A4540;
+  --clr-ink-3:     #8A8278;
+  --clr-ink-4:     #B5AFA7;
+
+  --clr-primary:   #D4601A;   /* warm orange — books, warmth */
+  --clr-primary-hover: #BC5216;
+  --clr-primary-light: #FDF0E8;
+  --clr-primary-muted: #F2C4A0;
+
+  --clr-accent:    #2E6B5E;   /* deep teal — trust, knowledge */
+  --clr-accent-hover: #245650;
+  --clr-accent-light: #E8F4F1;
+
+  --clr-success:   #2E7D52;
+  --clr-success-light: #E8F5EE;
+  --clr-warning:   #B45309;
+  --clr-warning-light: #FEF3C7;
+  --clr-error:     #C0392B;
+  --clr-error-light: #FDECEA;
+  --clr-info:      #1E6091;
+  --clr-info-light: #EBF4FB;
+
+  /* Dark mode */
+  --clr-dark-bg:       #141210;
+  --clr-dark-surface:  #1E1C19;
+  --clr-dark-surface2: #272420;
+  --clr-dark-border:   #352F28;
+  --clr-dark-ink:      #F0EDE8;
+  --clr-dark-ink-2:    #C8C2BA;
+  --clr-dark-ink-3:    #8A8278;
+
+  /* Typography */
+  --font-serif:  'Lora', Georgia, serif;
+  --font-sans:   'DM Sans', system-ui, sans-serif;
+
+  --text-xs:    0.75rem;
+  --text-sm:    0.875rem;
+  --text-base:  1rem;
+  --text-lg:    1.125rem;
+  --text-xl:    1.25rem;
+  --text-2xl:   1.5rem;
+  --text-3xl:   1.875rem;
+  --text-4xl:   2.25rem;
+  --text-5xl:   3rem;
+
+  /* Spacing */
+  --sp-1:   0.25rem;
+  --sp-2:   0.5rem;
+  --sp-3:   0.75rem;
+  --sp-4:   1rem;
+  --sp-5:   1.25rem;
+  --sp-6:   1.5rem;
+  --sp-8:   2rem;
+  --sp-10:  2.5rem;
+  --sp-12:  3rem;
+  --sp-16:  4rem;
+  --sp-20:  5rem;
+
+  /* Radius */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(26,23,20,0.08);
+  --shadow-md:  0 4px 12px rgba(26,23,20,0.10);
+  --shadow-lg:  0 8px 24px rgba(26,23,20,0.12);
+  --shadow-xl:  0 16px 48px rgba(26,23,20,0.16);
+
+  /* Transitions */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:   cubic-bezier(0.7, 0, 0.84, 0);
+  --dur-fast:  150ms;
+  --dur-base:  250ms;
+  --dur-slow:  400ms;
+
+  /* Layout */
+  --max-w-sm:   640px;
+  --max-w-md:   768px;
+  --max-w-lg:   1024px;
+  --max-w-xl:   1280px;
+  --sidebar-w:  280px;
+  --header-h:   64px;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --clr-bg:       var(--clr-dark-bg);
+  --clr-bg-alt:   var(--clr-dark-surface);
+  --clr-surface:  var(--clr-dark-surface);
+  --clr-border:   var(--clr-dark-border);
+  --clr-ink:      var(--clr-dark-ink);
+  --clr-ink-2:    var(--clr-dark-ink-2);
+  --clr-ink-3:    var(--clr-dark-ink-3);
+  --shadow-sm:    0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:    0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg:    0 8px 24px rgba(0,0,0,0.5);
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--clr-ink);
+  background-color: var(--clr-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--dur-base) var(--ease-out),
+              color var(--dur-base) var(--ease-out);
+}
+
+h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 600; line-height: 1.25; }
+h5, h6 { font-family: var(--font-sans); font-weight: 600; }
+
+a { color: var(--clr-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img, video { max-width: 100%; display: block; }
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--clr-border-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--clr-ink-3); }
+
+/* Selection */
+::selection { background: var(--clr-primary-light); color: var(--clr-primary); }
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--clr-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Utility classes */
+.container {
+  width: 100%;
+  max-width: var(--max-w-xl);
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Leaflet map overrides */
+.leaflet-container {
+  font-family: var(--font-sans) !important;
+  border-radius: var(--radius-lg);
+}
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
