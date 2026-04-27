@@ -256,3 +256,12 @@ REPUTATION_WEIGHTS = {
 MAX_ACTIVE_BORROWS_PER_USER = 5
 DEFAULT_BORROW_DURATION_DAYS = 14
 MAX_BORROW_EXTENSION_DAYS = 7
+
+# ─── Cloudinary ───────────────────────────────────────────────────────────────
+import cloudinary
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME', default=''),
+    api_key=config('CLOUDINARY_API_KEY', default=''),
+    api_secret=config('CLOUDINARY_API_SECRET', default=''),
+    secure=True
+)
