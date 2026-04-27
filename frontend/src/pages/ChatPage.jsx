@@ -56,7 +56,7 @@ function ChatRoom({ roomId }) {
         wsRef.current.send(JSON.stringify({ type: 'send_message', content, message_type: 'text' }));
       } else {
         const token = localStorage.getItem('access_token');
-        const res = await fetch('http://localhost:8000/api/v1/chat/messages/', {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1'}/chat/messages/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ function ChatRoom({ roomId }) {
           </button>
           <button onClick={async () => {
             try {
-              await fetch(`http://localhost:8000/api/v1/users/${other.id}/block/`, {
+             await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1'}/users/${other.id}/block/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
               });
