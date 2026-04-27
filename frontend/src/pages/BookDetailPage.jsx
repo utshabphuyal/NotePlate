@@ -129,7 +129,7 @@ export default function BookDetailPage() {
 
   const { data: book, isLoading, error } = useQuery({
     queryKey: ['book', id],
-    queryFn: () => bookService.getBook(id).then(r => { setSaved(r.data.is_saved); return r.data; }),
+    queryFn: () => bookService.get(id).then(r => { setSaved(r.data.is_saved); return r.data; }),
   });
 
   const saveMutation = useMutation({

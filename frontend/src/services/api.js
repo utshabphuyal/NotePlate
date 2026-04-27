@@ -121,7 +121,9 @@ export const userService = {
 // ─── Books Service ────────────────────────────────────────────────────────
 export const bookService = {
   list: (params) => api.get('/books/', { params }),
+  getBooks: (params) => api.get('/books/', { params }),
   get: (id) => api.get(`/books/${id}/`),
+  getBook: (id) => api.get(`/books/${id}/`),
   create: (data) => {
     const form = new FormData();
     Object.entries(data).forEach(([key, val]) => {
