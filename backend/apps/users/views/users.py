@@ -51,11 +51,18 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if avatar.size > 5 * 1024 * 1024:
             return Response({'error': 'Image too large. Max 5MB.'}, status=400)
 
-        request.user.avatar = avatar
-        request.user.save(update_fields=['avatar'])
-        return Response({
-            'avatar_url': request.build_absolute_uri(request.user.avatar.url)
-        })
+        import cloudinary.uploader
+        result = cloudinary.uploader.upload(
+    avatar,
+    folder='noteplate/avatars',
+    public_id=str(request.user.id),
+    overwrite=True,
+    transformation=[{'width': 400, 'height': 400, 'crop': 'fill'}]
+)
+        request.user.avatar_cloudinary_url = result['secure_url']
+        request.user.save(update_fields=['avatar_cloudinary_url'])
+        return Response({'avatar_url': result['secure_url']})
+        
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def change_password(self, request):
