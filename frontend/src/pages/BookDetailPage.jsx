@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen, MapPin, User, Heart, MessageCircle, RotateCcw,
   Star, Share2, QrCode, ChevronLeft, ChevronRight, Calendar,
-  Package, Tag, Info, Loader2, AlertTriangle, CheckCircle, Edit
+  Package, Tag, Info, Loader2, AlertTriangle, CheckCircle, Edit, X
 } from 'lucide-react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -271,13 +271,25 @@ export default function BookDetailPage() {
 
           {/* Actions */}
           {isOwner ? (
-            <div className="flex gap-3">
-              <Link to={`/books/${id}/edit`}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-brand-600 text-brand-600 font-semibold hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">
-                <Edit className="w-4 h-4" /> Edit Listing
-              </Link>
-            </div>
-          ) : (
+  <div className="flex gap-3">
+    <Link to={`/books/${id}/edit`}
+      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-brand-600 text-brand-600 font-semibold hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">
+      <Edit className="w-4 h-4" /> Edit Listing
+    </Link>
+    <button onClick={async () => {
+      if (window.confirm('Delete this listing?')) {
+        try {
+          await bookService.delete(id);
+          toast.success('Listing deleted!');
+          navigate('/books');
+        } catch { toast.error('Failed to delete'); }
+      }
+    }}
+      className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-red-300 text-red-600 hover:bg-red-50 transition-colors">
+      <X className="w-4 h-4" /> Delete
+    </button>
+  </div>
+) : (
             <div className="space-y-3">
               {book.status === 'active' && book.availability_type !== 'donate' && (
                 <button onClick={() => setBorrowModalOpen(true)}
