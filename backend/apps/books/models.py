@@ -147,11 +147,11 @@ class Book(models.Model):
 
 
 class BookImage(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='books/images/')
+    image = models.ImageField(upload_to='books/images/', null=True, blank=True)
+    cloudinary_url = models.URLField(null=True, blank=True)
     is_cover = models.BooleanField(default=False)
-    order = models.PositiveSmallIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:

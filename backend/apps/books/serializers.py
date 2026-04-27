@@ -18,6 +18,8 @@ class BookImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image_url', 'is_cover', 'order']
 
     def get_image_url(self, obj):
+        if obj.cloudinary_url:
+            return obj.cloudinary_url
         request = self.context.get('request')
         if obj.image and request:
             return request.build_absolute_uri(obj.image.url)
@@ -25,7 +27,6 @@ class BookImageSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    """Lightweight serializer for list/map views"""
     owner = UserPublicSerializer(read_only=True)
     cover_image = serializers.SerializerMethodField()
     is_saved = serializers.SerializerMethodField()
@@ -41,10 +42,13 @@ class BookListSerializer(serializers.ModelSerializer):
         ]
 
     def get_cover_image(self, obj):
-        request = self.context.get('request')
         img = obj.images.filter(is_cover=True).first() or obj.images.first()
-        if img and request:
-            return request.build_absolute_uri(img.image.url)
+        if img:
+            if img.cloudinary_url:
+                return img.cloudinary_url
+            request = self.context.get('request')
+            if img.image and request:
+                return request.build_absolute_uri(img.image.url)
         return None
 
     def get_is_saved(self, obj):
@@ -55,7 +59,6 @@ class BookListSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    """Full book detail serializer"""
     owner = UserPublicSerializer(read_only=True)
     images = BookImageSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
@@ -120,11 +123,27 @@ class BookCreateSerializer(serializers.ModelSerializer):
             Tag.objects.filter(id=tag.id).update(usage_count=tag.usage_count + 1)
             book.tags.add(tag)
 
-        # Handle images
+        # Handle images via Cloudinary
+        import cloudinary.uploader
         for i, img in enumerate(images[:5]):
-            BookImage.objects.create(
-                book=book, image=img, is_cover=(i == 0), order=i
-            )
+            try:
+                result = cloudinary.uploader.upload(
+                    img,
+                    folder='noteplate/books',
+                    public_id=f'{book.id}_{i}',
+                    overwrite=True,
+                    transformation=[{'width': 800, 'height': 800, 'crop': 'limit'}]
+                )
+                BookImage.objects.create(
+                    book=book,
+                    cloudinary_url=result['secure_url'],
+                    is_cover=(i == 0),
+                    order=i
+                )
+            except Exception as e:
+                BookImage.objects.create(
+                    book=book, image=img, is_cover=(i == 0), order=i
+                )
 
         return book
 
