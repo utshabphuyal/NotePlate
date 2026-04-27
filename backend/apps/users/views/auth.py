@@ -7,7 +7,6 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from django.utils import timezone
 from django.conf import settings
 
@@ -38,7 +37,7 @@ class LoginView(TokenObtainPairView):
 
 
 class RegisterView(generics.CreateAPIView):
-    """User registration with email verification"""
+    """User registration - auto verified"""
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
     throttle_classes = [LoginThrottle]
@@ -48,37 +47,15 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # Generate email verification token
-        token = secrets.token_urlsafe(32)
-        user.email_verify_token = hashlib.sha256(token.encode()).hexdigest()
-        user.email_verify_expires = timezone.now() + timedelta(hours=24)
-        user.save(update_fields=['email_verify_token', 'email_verify_expires'])
-
-        # Send verification email
-        self._send_verification_email(user, token)
+        # Auto-verify email (email service not configured)
+        user.email_verified = True
+        user.is_active = True
+        user.save(update_fields=['email_verified', 'is_active'])
 
         return Response({
-            'message': 'Registration successful. Please check your email to verify your account.',
+            'message': 'Registration successful. You can now log in.',
             'email': user.email,
         }, status=status.HTTP_201_CREATED)
-
-    def _send_verification_email(self, user, token):
-        verify_url = f"{settings.FRONTEND_URL}/verify-email?token={token}"
-        try:
-            send_mail(
-                subject='Verify your NotePlate account',
-                message=f'Click to verify: {verify_url}',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                html_message=render_to_string('emails/verify_email.html', {
-                    'user': user,
-                    'verify_url': verify_url,
-                }),
-                fail_silently=False,
-            )
-        except Exception as e:
-            import logging
-            logging.getLogger('apps.users').error(f'Failed to send verification email: {e}')
 
 
 @api_view(['POST'])
@@ -118,22 +95,12 @@ def resend_verification(request):
     try:
         user = User.objects.get(email=email, email_verified=False)
     except User.DoesNotExist:
-        # Don't reveal if email exists
         return Response({'message': 'If that email exists, a verification link has been sent.'})
 
     token = secrets.token_urlsafe(32)
     user.email_verify_token = hashlib.sha256(token.encode()).hexdigest()
     user.email_verify_expires = timezone.now() + timedelta(hours=24)
     user.save(update_fields=['email_verify_token', 'email_verify_expires'])
-
-    verify_url = f"{settings.FRONTEND_URL}/verify-email?token={token}"
-    send_mail(
-        subject='Verify your NotePlate account',
-        message=f'Click to verify: {verify_url}',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=True,
-    )
 
     return Response({'message': 'If that email exists, a verification link has been sent.'})
 
@@ -162,7 +129,7 @@ def forgot_password(request):
             fail_silently=True,
         )
     except User.DoesNotExist:
-        pass  # Silent - don't reveal user existence
+        pass
 
     return Response({'message': 'If that email exists, a password reset link has been sent.'})
 
