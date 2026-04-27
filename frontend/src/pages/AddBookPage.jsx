@@ -104,13 +104,12 @@ export default function AddBookPage() {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
-      const payload = {
+      const res = await bookService.create({
         ...data,
         tag_names: tags,
-        uploaded_images: images,
-        subjects: data.subjects ? [data.subjects] : [],
-      };
-      const res = await bookService.createBook(payload);
+        images: images,
+        subjects: data.subject ? [data.subject] : [],
+      });
       toast.success('Book listed successfully!');
       navigate(`/books/${res.data.id}`);
     } catch (err) {
