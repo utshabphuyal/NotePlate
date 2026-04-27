@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-# ─── Database (MongoDB via Djongo) ────────────────────────────────────────────
+# ─── Database ────────────────────────────────────────────────────────────────
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -167,8 +167,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# File upload settings
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 ALLOWED_DOCUMENT_TYPES = ['application/pdf']
@@ -181,7 +180,7 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='NotePlate <noreply@NotePlate.app>')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='NotePlate <noreply@noteplate.com>')
 
 # ─── Celery ───────────────────────────────────────────────────────────────────
 CELERY_BROKER_URL = REDIS_URL
@@ -190,7 +189,6 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # ─── Google Maps ──────────────────────────────────────────────────────────────
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
@@ -213,28 +211,25 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ─── Logging ──────────────────────────────────────────────────────────────────
+# ─── Logging (console only for production) ────────────────────────────────────
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-    },
     'handlers': {
-        'console': {'class': 'logging.StreamHandler', 'formatter': 'verbose'},
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/NotePlate.log',
-            'formatter': 'verbose',
+        'console': {
+            'class': 'logging.StreamHandler',
         },
     },
-    'root': {'handlers': ['console'], 'level': 'INFO'},
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
     'loggers': {
-        'django': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
-        'apps': {'handlers': ['console', 'file'], 'level': 'DEBUG', 'propagate': False},
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     },
 }
 
