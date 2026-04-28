@@ -141,7 +141,7 @@ export default function LandingPage() {
             </div>
             <span className="font-display font-bold text-gray-700 dark:text-gray-300">NotePlate</span>
           </div>
-          <p className="text-sm text-gray-500">© 2024 NotePlate. Built for students, by students.</p>
+          <p className="text-sm text-gray-500">© 2026 NotePlate. Built for students, by students.</p>
         </div>
       </footer>
     </div>

@@ -49,7 +49,7 @@ export default function AuthLayout() {
         </motion.div>
 
         <p className="text-brand-300 text-sm relative z-10">
-          © 2024 NotePlate. All rights reserved.
+          © 2026 NotePlate. All rights reserved.
         </p>
       </div>
 
